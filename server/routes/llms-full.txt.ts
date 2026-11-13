@@ -40,7 +40,7 @@ ${site.fullName} é cirurgião plástico com registro de especialista no Conselh
 
 ## Locais de atendimento
 
-${site.locations.map(l => `- ${l.city}, ${site.stateCode}${l.street ? `: ${l.street}` : ''}`).join('\n')}
+${site.locations.map(l => `- ${l.city}, ${site.stateCode}${l.street ? `: ${l.street}${l.district ? `, ${l.district}` : ''}${l.postalCode ? `, CEP ${l.postalCode}` : ''}` : ''}${l.phoneDisplay ? ` · Telefone ${l.phoneDisplay}` : ''}${l.hoursLabel ? ` · ${l.hoursLabel}` : ''}`).join('\n')}
 
 ## Dúvidas frequentes
 

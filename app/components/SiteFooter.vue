@@ -48,6 +48,9 @@ const year = new Date().getFullYear()
         <nav class="footer__col" aria-label="Contato">
           <p class="footer__title">Contato</p>
           <a :href="site.links.booking" target="_blank" rel="noopener" class="footer__link">Agendar avaliação</a>
+          <template v-for="l in site.locations" :key="`tel-${l.slug}`">
+            <a v-if="l.phone" :href="`tel:${l.phone}`" class="footer__link">{{ l.phoneDisplay }} · {{ l.shortName }}</a>
+          </template>
           <a :href="site.links.instagram" target="_blank" rel="noopener" class="footer__link">{{ site.links.instagramHandle }}</a>
           <NuxtLink to="/links" class="footer__link">Links rápidos</NuxtLink>
         </nav>

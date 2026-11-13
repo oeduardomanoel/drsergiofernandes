@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { site, mapsUrl } from '#shared/data/site'
+
+const main = site.locations.find(l => l.street) || site.locations[0]!
+const others = site.locations.filter(l => l.slug !== main.slug)
+const embedUrl = `https://www.google.com/maps?q=${encodeURIComponent(main.mapsQuery)}&output=embed&hl=pt-BR`
 </script>
 
 <template>
@@ -8,10 +12,10 @@ import { site, mapsUrl } from '#shared/data/site'
       <div class="section-head section-head--center">
         <p v-reveal:fade class="eyebrow">Onde atende</p>
         <h2 id="locais-title" v-reveal class="h2">
-          Três cidades, <em>o mesmo cirurgião.</em>
+          O consultório fica em <em>{{ main.city }}.</em>
         </h2>
         <p v-reveal="100" class="lead">
-          Consultas e cirurgias em Balneário Camboriú, Florianópolis e Criciúma. Escolha a cidade mais perto de você na hora de agendar.
+          No {{ main.district || main.region }}<template v-if="main.hoursLabel">, com atendimento de {{ main.hoursLabel.charAt(0).toLowerCase() + main.hoursLabel.slice(1) }}</template>.
         </p>
       </div>
 
@@ -26,31 +30,57 @@ import { site, mapsUrl } from '#shared/data/site'
         </figure>
       </div>
 
-      <ul class="locations__grid" role="list">
-        <li v-for="(l, i) in site.locations" :key="l.slug" v-reveal="i * 100">
-          <article class="loc">
-            <div class="loc__head">
-              <span class="loc__pin"><AppIcon name="map-pin" :size="20" /></span>
-              <span class="loc__region">{{ l.region }}</span>
-            </div>
-            <h3 class="loc__city">{{ l.city }}</h3>
-            <p class="loc__address">
-              <template v-if="l.street">{{ l.street }}<template v-if="l.postalCode"> · CEP {{ l.postalCode }}</template></template>
-              <template v-else>Endereço confirmado pela equipe no agendamento.</template>
-            </p>
-            <div class="loc__actions">
-              <a :href="site.links.booking" target="_blank" rel="noopener" class="btn btn--block">
-                Agendar em {{ l.shortName }}
-                <AppIcon name="arrow-right" />
-              </a>
-              <a :href="mapsUrl(l.mapsQuery)" target="_blank" rel="noopener" class="link-underline loc__map">
-                Ver no Google Maps
-                <AppIcon name="arrow-up-right" />
-              </a>
-            </div>
-          </article>
-        </li>
-      </ul>
+      <div class="locations__main">
+        <article v-reveal class="loc">
+          <div class="loc__head">
+            <span class="loc__pin"><AppIcon name="map-pin" :size="20" /></span>
+            <span class="loc__region">{{ main.region }}</span>
+          </div>
+          <h3 class="loc__city">{{ main.city }}</h3>
+          <address class="loc__address">
+            <template v-if="main.street">
+              {{ main.street }}<template v-if="main.district">, {{ main.district }}</template><br>
+              {{ main.city }} · {{ site.stateCode }}<template v-if="main.postalCode"> · CEP {{ main.postalCode }}</template>
+            </template>
+            <template v-else>Endereço confirmado pela equipe no agendamento.</template>
+          </address>
+          <ul v-if="main.phone || main.hoursLabel" class="loc__info" role="list">
+            <li v-if="main.phone">
+              <AppIcon name="phone" :size="16" />
+              <a :href="`tel:${main.phone}`" class="loc__phone">{{ main.phoneDisplay || main.phone }}</a>
+            </li>
+            <li v-if="main.hoursLabel">
+              <AppIcon name="clock" :size="16" />
+              <span>{{ main.hoursLabel }}</span>
+            </li>
+          </ul>
+          <div class="loc__actions">
+            <a :href="site.links.booking" target="_blank" rel="noopener" class="btn btn--block">
+              Agendar avaliação
+              <AppIcon name="arrow-right" />
+            </a>
+            <a :href="mapsUrl(main.mapsQuery)" target="_blank" rel="noopener" class="link-underline loc__map">
+              Como chegar pelo Google Maps
+              <AppIcon name="arrow-up-right" />
+            </a>
+          </div>
+        </article>
+
+        <div v-reveal:scale="120" class="locations__map">
+          <iframe
+            :src="embedUrl"
+            :title="`Mapa do consultório em ${main.city}`"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+          />
+        </div>
+      </div>
+
+      <p v-if="others.length" v-reveal:fade class="locations__others">
+        <i aria-hidden="true" />
+        Também atende em {{ others.map(o => o.city).join(' e ') }}. Escolha a cidade na hora de agendar.
+      </p>
     </div>
   </section>
 </template>
@@ -100,19 +130,59 @@ import { site, mapsUrl } from '#shared/data/site'
   color: var(--ink);
 }
 
-.locations__grid {
+.locations__main {
   display: grid;
   gap: var(--spacing-grid);
 }
 
-.locations__grid > li {
-  display: grid;
+.locations__map {
+  min-height: 320px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--sand);
+  border: 1px solid var(--line);
+}
+
+.locations__map iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  border: 0;
+  filter: saturate(0.85);
+  transition: filter var(--dur-med) var(--ease-out);
+}
+
+.locations__map:hover iframe {
+  filter: none;
+}
+
+.locations__others {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.locations__others i {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  background: var(--diamond);
+  transform: rotate(45deg);
+  border-radius: 1px;
 }
 
 .loc {
   position: relative;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: var(--spacing-stack);
+  height: 100%;
   padding: var(--spacing-card-lg);
   border-radius: var(--radius-xl);
   background: var(--paper);
@@ -196,14 +266,48 @@ import { site, mapsUrl } from '#shared/data/site'
 .loc__address {
   color: var(--text-muted);
   font-size: var(--text-sm);
+  font-style: normal;
+  line-height: 1.6;
   min-height: 3.2em;
+}
+
+.loc__info {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.loc__info li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.loc__info svg {
+  flex-shrink: 0;
+  color: var(--gold);
+}
+
+.loc__phone {
+  font-weight: 600;
+  color: var(--ink);
+  transition: color var(--dur-fast);
+}
+
+.loc__phone:hover {
+  color: var(--navy-3);
 }
 
 .loc__actions {
   display: grid;
   gap: var(--space-4);
   justify-items: center;
-  margin-top: var(--spacing-group);
+  margin-top: auto;
+  padding-top: var(--spacing-group);
 }
 
 .loc__map {
@@ -219,8 +323,8 @@ import { site, mapsUrl } from '#shared/data/site'
     aspect-ratio: 16 / 9;
   }
 
-  .locations__grid {
-    grid-template-columns: repeat(3, 1fr);
+  .locations__main {
+    grid-template-columns: 5fr 7fr;
   }
 }
 </style>

@@ -7,21 +7,40 @@ export const ids = (base: string) => ({
   website: `${base}/#website`,
 })
 
+function address(l: (typeof site.locations)[number]) {
+  return {
+    '@type': 'PostalAddress',
+    ...(l.street ? { streetAddress: l.street } : {}),
+    ...(l.postalCode ? { postalCode: l.postalCode } : {}),
+    'addressLocality': l.city,
+    'addressRegion': site.stateCode,
+    'addressCountry': 'BR',
+  }
+}
+
+function hoursSpec(l: (typeof site.locations)[number]) {
+  return l.hours.map(h => ({
+    '@type': 'OpeningHoursSpecification',
+    'dayOfWeek': h.days.map(d => `https://schema.org/${d}`),
+    'opens': h.opens,
+    'closes': h.closes,
+  }))
+}
+
 function places() {
   return site.locations.map(l => ({
     '@type': 'Place',
     'name': `${site.name} · ${l.city}`,
     'hasMap': mapsUrl(l.mapsQuery),
-    'address': {
-      '@type': 'PostalAddress',
-      ...(l.street ? { streetAddress: l.street } : {}),
-      ...(l.postalCode ? { postalCode: l.postalCode } : {}),
-      'addressLocality': l.city,
-      'addressRegion': site.stateCode,
-      'addressCountry': 'BR',
-    },
+    'address': address(l),
     ...(l.phone ? { telephone: l.phone } : {}),
+    ...(l.hours.length ? { openingHoursSpecification: hoursSpec(l) } : {}),
   }))
+}
+
+/** Unidade principal para o Google: a primeira com endereço completo. */
+function mainLocation() {
+  return site.locations.find(l => l.street) || site.locations[0]!
 }
 
 export function procedureSchema(p: Procedure, base: string) {
@@ -67,7 +86,10 @@ export function coreSchema(base: string) {
       'currenciesAccepted': 'BRL',
       'areaServed': site.locations.map(l => ({ '@type': 'City', 'name': `${l.city}, ${site.stateCode}` })),
       'location': places(),
-      'address': places()[0]?.address,
+      'address': address(mainLocation()),
+      ...(mainLocation().phone ? { telephone: mainLocation().phone } : {}),
+      ...(mainLocation().hours.length ? { openingHoursSpecification: hoursSpec(mainLocation()) } : {}),
+      ...(mainLocation().street ? { hasMap: mapsUrl(mainLocation().mapsQuery) } : {}),
       'sameAs': sameAs,
       'identifier': [
         { '@type': 'PropertyValue', 'propertyID': 'CRM-SC', 'value': '7913' },

@@ -17,6 +17,7 @@ Fatos principais:
 - Experiência: mais de ${site.stats.years} anos
 - Cirurgias realizadas: mais de 14 mil
 - Cidades de atendimento: ${site.locations.map(l => l.city).join(', ')} (${site.stateCode})
+${site.locations.filter(l => l.street).map(l => `- Endereço em ${l.city}: ${l.street}${l.district ? `, ${l.district}` : ''}, ${l.city} - ${site.stateCode}${l.postalCode ? `, ${l.postalCode}` : ''}${l.phoneDisplay ? ` · Telefone ${l.phoneDisplay}` : ''}${l.hoursLabel ? ` · ${l.hoursLabel}` : ''}`).join('\n')}
 - Agendamento: ${site.links.booking}
 - Instagram: ${site.links.instagram} (${site.stats.followers} seguidores)
 

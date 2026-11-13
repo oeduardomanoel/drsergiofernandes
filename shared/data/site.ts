@@ -13,8 +13,16 @@ export interface Location {
   /** Endereço completo. Vazio = card mostra só a cidade + link do Maps. */
   street: string
   postalCode: string
-  /** Telefone fixo ou WhatsApp desta unidade (formato +55...). */
+  /** Telefone desta unidade no formato internacional (+55...). */
   phone: string
+  /** Como o telefone aparece na tela. */
+  phoneDisplay: string
+  /** Bairro (entra no endereço exibido). */
+  district: string
+  /** Horários no padrão schema.org. Vazio = não exibe. */
+  hours: { days: ('Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday')[], opens: string, closes: string }[]
+  /** Texto curto dos horários para a tela. */
+  hoursLabel: string
   mapsQuery: string
 }
 
@@ -75,8 +83,12 @@ export const site = {
       shortName: 'BC',
       region: 'Litoral Norte',
       street: '',
+      district: '',
       postalCode: '',
       phone: '',
+      phoneDisplay: '',
+      hours: [],
+      hoursLabel: '',
       mapsQuery: 'Dr Sergio Fernandes cirurgião plástico Balneário Camboriú',
     },
     {
@@ -84,10 +96,14 @@ export const site = {
       city: 'Florianópolis',
       shortName: 'Floripa',
       region: 'Grande Florianópolis',
-      street: '',
-      postalCode: '',
-      phone: '',
-      mapsQuery: 'Dr Sergio Fernandes cirurgião plástico Florianópolis',
+      street: 'R. Gen. Acastro de Campos, 153',
+      district: 'Morro da Cruz',
+      postalCode: '88025-140',
+      phone: '+5548984317226',
+      phoneDisplay: '(48) 98431-7226',
+      hours: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '08:00', closes: '19:00' }],
+      hoursLabel: 'Segunda a sexta, das 8h às 19h',
+      mapsQuery: 'Dr. Sérgio Fernandes Cirurgia Plástica, R. Gen. Acastro de Campos, 153, Florianópolis',
     },
     {
       slug: 'criciuma',
@@ -95,8 +111,12 @@ export const site = {
       shortName: 'Criciúma',
       region: 'Sul Catarinense',
       street: '',
+      district: '',
       postalCode: '',
       phone: '',
+      phoneDisplay: '',
+      hours: [],
+      hoursLabel: '',
       mapsQuery: 'Dr Sergio Fernandes cirurgião plástico Criciúma',
     },
   ] satisfies Location[],
