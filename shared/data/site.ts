@@ -58,9 +58,14 @@ export const site = {
      * Foto principal (retrato). Coloque o arquivo em /public/images e aponte aqui,
      * ex: '/images/dr-sergio.webp'. Vazio = moldura com monograma.
      */
-    portrait: '',
+    portrait: '/images/dr-sergio-retrato.webp',
     /** Foto em ação (centro cirúrgico / consultório). */
-    action: '',
+    action: '/images/dr-sergio-centro-cirurgico.webp',
+    /** Avatar usado na réplica do perfil do Instagram. */
+    instagramAvatar: '/images/instagram/avatar.webp',
+    /** Ambientes (recortados do Instagram). */
+    reception: '/images/clinica-recepcao.webp',
+    hospital: '/images/hbm-hospital.webp',
   },
 
   locations: [
@@ -98,11 +103,11 @@ export const site = {
 
   /** Destaques do Instagram (na mesma ordem do perfil). */
   highlights: [
-    { label: 'Abdominoplastia', procedure: 'abdominoplastia' },
-    { label: 'Depoimentos', procedure: '' },
-    { label: 'Mama', procedure: 'cirurgia-de-mama' },
-    { label: 'Lipo HD', procedure: 'lipo-hd' },
-    { label: 'Rinoplastia', procedure: 'rinoplastia' },
+    { label: 'Abdominoplastia', procedure: 'abdominoplastia', image: '/images/instagram/destaque-abdominoplastia.webp' },
+    { label: 'Depoimentos', procedure: '', image: '/images/instagram/destaque-depoimentos.webp' },
+    { label: 'Mama', procedure: 'cirurgia-de-mama', image: '/images/instagram/destaque-mama.webp' },
+    { label: 'Lipo HD', procedure: 'lipo-hd', image: '/images/instagram/destaque-lipo-hd.webp' },
+    { label: 'Rinoplastia', procedure: 'rinoplastia', image: '/images/instagram/destaque-rinoplastia.webp' },
   ],
 
   /**
@@ -110,12 +115,12 @@ export const site = {
    * Troque `image` por prints/fotos reais em /public/images/instagram e `url` pelo link do post.
    */
   instagramPosts: [
-    { kind: 'reel', caption: 'Bastidores do centro cirúrgico', tone: 'navy', image: '', url: '' },
-    { kind: 'reel', caption: 'Paciente conta como foi a decisão', tone: 'sand', image: '', url: '' },
-    { kind: 'reel', caption: 'Primeira troca de curativo', tone: 'ivory', image: '', url: '' },
-    { kind: 'reel', caption: 'Diário do dia 2 do meu sonho realizado', tone: 'rose', image: '', url: '' },
-    { kind: 'reel', caption: '“Quando sobrar um dinheirinho eu ajudo nas contas”', tone: 'gold', image: '', url: '' },
-    { kind: 'post', caption: 'Dúvidas frequentes no pós-operatório', tone: 'navy', image: '', url: '' },
+    { kind: 'reel', caption: 'Bastidores do centro cirúrgico', tone: 'navy', image: '/images/instagram/bastidores-centro-cirurgico.webp', url: '' },
+    { kind: 'reel', caption: 'O tamanho de prótese que a paciente quer', tone: 'sand', image: '/images/instagram/protese-consultorio.webp', url: '' },
+    { kind: 'post', caption: '+14 mil cirurgias realizadas', tone: 'navy', image: '/images/instagram/14-mil-cirurgias.webp', url: '' },
+    { kind: 'reel', caption: 'Somos nós: a equipe', tone: 'rose', image: '/images/instagram/equipe.webp', url: '' },
+    { kind: 'post', caption: '30 anos de profissão', tone: 'gold', image: '/images/instagram/30-anos.webp', url: '' },
+    { kind: 'reel', caption: 'Bastidores cirúrgicos', tone: 'navy', image: '/images/instagram/bastidores-cirurgico.webp', url: '' },
   ],
 } as const
 

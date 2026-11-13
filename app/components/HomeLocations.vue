@@ -15,6 +15,17 @@ import { site, mapsUrl } from '#shared/data/site'
         </p>
       </div>
 
+      <div class="locations__photos">
+        <figure v-if="site.images.reception" v-reveal:mask class="locations__photo">
+          <img :src="site.images.reception" alt="Recepção do consultório do Dr. Sergio Fernandes" width="708" height="945" loading="lazy">
+          <figcaption>Recepção do consultório</figcaption>
+        </figure>
+        <figure v-if="site.images.hospital" v-reveal:mask="120" class="locations__photo">
+          <img :src="site.images.hospital" alt="Fachada do HBM Hospital" width="708" height="945" loading="lazy">
+          <figcaption>HBM Hospital</figcaption>
+        </figure>
+      </div>
+
       <ul class="locations__grid" role="list">
         <li v-for="(l, i) in site.locations" :key="l.slug" v-reveal="i * 100">
           <article class="loc">
@@ -45,6 +56,50 @@ import { site, mapsUrl } from '#shared/data/site'
 </template>
 
 <style scoped>
+.locations__photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-grid);
+  margin-bottom: var(--spacing-grid);
+}
+
+.locations__photo {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  aspect-ratio: 4 / 3;
+  background: var(--sand);
+}
+
+.locations__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1200ms var(--ease-out);
+}
+
+.locations__photo:first-child img {
+  object-position: center 18%;
+}
+
+.locations__photo:hover img {
+  transform: scale(1.05);
+}
+
+.locations__photo figcaption {
+  position: absolute;
+  left: var(--space-4);
+  bottom: var(--space-4);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: rgba(251, 248, 243, 0.86);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--ink);
+}
+
 .locations__grid {
   display: grid;
   gap: var(--spacing-grid);
@@ -160,6 +215,10 @@ import { site, mapsUrl } from '#shared/data/site'
 }
 
 @media (min-width: 900px) {
+  .locations__photo {
+    aspect-ratio: 16 / 9;
+  }
+
   .locations__grid {
     grid-template-columns: repeat(3, 1fr);
   }

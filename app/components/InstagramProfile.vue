@@ -23,7 +23,7 @@ const NuxtLink = resolveComponent('NuxtLink')
     <div class="ig__header">
       <a :href="site.links.instagram" target="_blank" rel="noopener" class="ig__avatar" aria-label="Abrir perfil no Instagram">
         <span class="ig__avatar-inner">
-          <img v-if="site.images.portrait" :src="site.images.portrait" alt="" width="80" height="80" loading="lazy">
+          <img v-if="site.images.instagramAvatar" :src="site.images.instagramAvatar" alt="" width="80" height="80" loading="lazy">
           <BrandMark v-else compact />
         </span>
       </a>
@@ -60,7 +60,12 @@ const NuxtLink = resolveComponent('NuxtLink')
           :rel="h.procedure ? undefined : 'noopener'"
           class="ig__hl"
         >
-          <span class="ig__hl-ring"><span class="ig__hl-inner">{{ h.label.slice(0, 1) }}</span></span>
+          <span class="ig__hl-ring">
+            <span class="ig__hl-inner">
+              <img v-if="h.image" :src="h.image" alt="" width="56" height="56" loading="lazy">
+              <template v-else>{{ h.label.slice(0, 1) }}</template>
+            </span>
+          </span>
           <span class="ig__hl-label">{{ h.label }}</span>
         </component>
       </li>
@@ -296,6 +301,18 @@ const NuxtLink = resolveComponent('NuxtLink')
   font-size: var(--text-2xl);
   color: var(--navy);
   transition: background var(--dur-med);
+}
+
+.ig__hl-inner img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: transform var(--dur-med) var(--ease-out);
+}
+
+.ig__hl:hover .ig__hl-inner img {
+  transform: scale(1.12);
 }
 
 .ig__hl:hover .ig__hl-ring {
