@@ -9,25 +9,11 @@ const embedUrl = `https://www.google.com/maps?q=${encodeURIComponent(main.mapsQu
 <template>
   <section id="locais" class="section section--ivory locations" aria-labelledby="locais-title">
     <div class="container">
-      <div class="section-head section-head--center">
-        <p v-reveal:fade class="eyebrow">Onde atende</p>
-        <h2 id="locais-title" v-reveal class="h2">
-          O consultório fica em <em>{{ main.city }}.</em>
-        </h2>
-        <p v-reveal="100" class="lead">
-          No {{ main.district || main.region }}<template v-if="main.hoursLabel">, com atendimento de {{ main.hoursLabel.charAt(0).toLowerCase() + main.hoursLabel.slice(1) }}</template>.
+      <div class="locations__head">
+        <h2 id="locais-title" v-reveal class="h2">Consultório em {{ main.city }}</h2>
+        <p v-if="others.length" v-reveal="100" class="lead">
+          Também atende em {{ others.map(o => o.city).join(' e ') }}. Escolha a cidade na hora de agendar.
         </p>
-      </div>
-
-      <div class="locations__photos">
-        <figure v-if="site.images.reception" v-reveal:mask class="locations__photo">
-          <img :src="site.images.reception" alt="Recepção do consultório do Dr. Sergio Fernandes" width="708" height="945" loading="lazy">
-          <figcaption>Recepção do consultório</figcaption>
-        </figure>
-        <figure v-if="site.images.hospital" v-reveal:mask="120" class="locations__photo">
-          <img :src="site.images.hospital" alt="Fachada do HBM Hospital" width="708" height="945" loading="lazy">
-          <figcaption>HBM Hospital</figcaption>
-        </figure>
       </div>
 
       <div class="locations__main">
@@ -77,57 +63,28 @@ const embedUrl = `https://www.google.com/maps?q=${encodeURIComponent(main.mapsQu
         </div>
       </div>
 
-      <p v-if="others.length" v-reveal:fade class="locations__others">
-        <i aria-hidden="true" />
-        Também atende em {{ others.map(o => o.city).join(' e ') }}. Escolha a cidade na hora de agendar.
-      </p>
     </div>
   </section>
 </template>
 
 <style scoped>
-.locations__photos {
+.locations__head {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-grid);
-  margin-bottom: var(--spacing-grid);
+  gap: var(--space-4);
+  margin-bottom: var(--spacing-section-head);
 }
 
-.locations__photo {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius-xl);
-  aspect-ratio: 4 / 3;
-  background: var(--sand);
-}
+@media (min-width: 900px) {
+  .locations__head {
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+    gap: var(--space-8);
+  }
 
-.locations__photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 1200ms var(--ease-out);
-}
-
-.locations__photo:first-child img {
-  object-position: center 18%;
-}
-
-.locations__photo:hover img {
-  transform: scale(1.05);
-}
-
-.locations__photo figcaption {
-  position: absolute;
-  left: var(--space-4);
-  bottom: var(--space-4);
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-pill);
-  background: rgba(251, 248, 243, 0.86);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  color: var(--ink);
+  .locations__head .lead {
+    justify-self: end;
+    max-width: 44ch;
+  }
 }
 
 .locations__main {
@@ -155,26 +112,6 @@ const embedUrl = `https://www.google.com/maps?q=${encodeURIComponent(main.mapsQu
 
 .locations__map:hover iframe {
   filter: none;
-}
-
-.locations__others {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  margin-top: var(--space-6);
-  font-size: var(--text-sm);
-  color: var(--text-muted);
-  text-align: center;
-}
-
-.locations__others i {
-  flex-shrink: 0;
-  width: 8px;
-  height: 8px;
-  background: var(--diamond);
-  transform: rotate(45deg);
-  border-radius: 1px;
 }
 
 .loc {
@@ -319,10 +256,6 @@ const embedUrl = `https://www.google.com/maps?q=${encodeURIComponent(main.mapsQu
 }
 
 @media (min-width: 900px) {
-  .locations__photo {
-    aspect-ratio: 16 / 9;
-  }
-
   .locations__main {
     grid-template-columns: 5fr 7fr;
   }

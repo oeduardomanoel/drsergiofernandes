@@ -1,100 +1,116 @@
 <script setup lang="ts">
-import { site } from '#shared/data/site'
+import { site, whatsappUrl } from '#shared/data/site'
 
-const { el, progress } = useScrollProgress()
+const props = defineProps<{ procedure?: string }>()
+const main = site.locations.find(l => l.street)
+const message = props.procedure
+  ? `Olá! Vim pelo site e quero agendar uma avaliação de ${props.procedure} com o Dr. Sergio Fernandes.`
+  : undefined
 </script>
 
 <template>
-  <section ref="el" class="section section--dark cta" aria-labelledby="cta-title">
-    <svg
-      class="cta__seal"
-      viewBox="0 0 200 200"
-      aria-hidden="true"
-      :style="{ transform: `rotate(${progress * 220}deg)` }"
-    >
-      <defs>
-        <path id="cta-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
-      </defs>
-      <text font-family="Manrope, sans-serif" font-size="11.5" letter-spacing="4.2" fill="currentColor">
-        <textPath href="#cta-circle">AGENDE SUA AVALIAÇÃO ◆ DR. SERGIO FERNANDES ◆ CIRURGIÃO PLÁSTICO ◆</textPath>
-      </text>
-    </svg>
+  <section class="section section--dark cta" aria-labelledby="cta-title">
+    <div class="container cta__inner">
+      <div class="cta__copy">
+        <h2 id="cta-title" v-reveal class="display cta__title">
+          Agende sua avaliação<template v-if="procedure"> de {{ procedure.toLowerCase() === 'lipo hd' ? 'Lipo HD' : procedure.toLowerCase() }}</template>.
+        </h2>
+        <p v-reveal="100" class="lead">
+          Na consulta você tira suas dúvidas, entende as opções para o seu caso e sai sabendo os próximos passos.
+          Não há compromisso de marcar cirurgia.
+        </p>
+      </div>
 
-    <div class="container container--narrow cta__inner">
-      <p v-reveal:fade class="eyebrow">Próximo passo</p>
-      <h2 id="cta-title" v-reveal:lines class="display cta__title">
-        <span class="split-line"><span>O primeiro passo</span></span>
-        <span class="split-line" style="--line-delay: 100ms"><span>é <em>uma conversa.</em></span></span>
-      </h2>
-      <p v-reveal="200" class="lead cta__lead">
-        Na avaliação você tira suas dúvidas, entende as opções para o seu caso e sai sabendo os próximos passos.
-        Sem compromisso de marcar cirurgia.
-      </p>
-      <div v-reveal="300" class="cta__actions">
-        <a :href="site.links.booking" target="_blank" rel="noopener" class="btn btn--gold btn--lg">
-          Agendar minha avaliação
+      <div v-reveal="200" class="cta__panel">
+        <a :href="whatsappUrl(message)" target="_blank" rel="noopener" class="btn btn--gold btn--lg btn--block">
+          <AppIcon name="whatsapp" />
+          Chamar no WhatsApp
+        </a>
+        <a :href="site.links.booking" target="_blank" rel="noopener" class="btn btn--ghost btn--lg btn--block">
+          Agendar pelo link
           <AppIcon name="arrow-right" />
         </a>
-        <a :href="site.links.instagram" target="_blank" rel="noopener" class="btn btn--ghost btn--lg">
-          <AppIcon name="instagram" />
-          Ver o Instagram
-        </a>
+        <dl v-if="main" class="cta__info">
+          <div>
+            <dt>Telefone</dt>
+            <dd><a :href="`tel:${main.phone}`">{{ main.phoneDisplay }}</a></dd>
+          </div>
+          <div>
+            <dt>Horário</dt>
+            <dd>{{ main.hoursLabel }}</dd>
+          </div>
+        </dl>
       </div>
-      <p v-reveal:fade="400" class="cta__meta">{{ site.crm }} · {{ site.rqe }}</p>
     </div>
   </section>
 </template>
 
 <style scoped>
 .cta {
-  overflow: hidden;
-  text-align: center;
-  background:
-    radial-gradient(700px 360px at 50% 120%, rgba(201, 167, 116, 0.28), transparent 70%),
-    radial-gradient(600px 300px at 0% 0%, rgba(74, 134, 240, 0.14), transparent 70%),
-    var(--navy);
-}
-
-.cta__seal {
-  position: absolute;
-  top: var(--space-6);
-  right: var(--space-6);
-  width: 160px;
-  height: 160px;
-  color: var(--gold-2);
-  opacity: 0.6;
-  display: none;
+  background: var(--navy);
 }
 
 .cta__inner {
-  position: relative;
   display: grid;
-  justify-items: center;
+  gap: var(--space-8);
+  align-items: end;
+}
+
+.cta__copy {
+  display: grid;
   gap: var(--space-5);
 }
 
-.cta__lead {
-  margin-inline: auto;
+.cta__title {
+  max-width: 14ch;
 }
 
-.cta__actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.cta__panel {
+  display: grid;
   gap: var(--space-3);
-  margin-top: var(--space-3);
+  padding: var(--spacing-card-lg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--line-on-dark);
+  background: rgba(245, 239, 229, 0.04);
 }
 
-.cta__meta {
+.cta__info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin: var(--space-3) 0 0;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line-on-dark);
+}
+
+.cta__info dt {
   font-size: var(--text-xs);
-  letter-spacing: 0.14em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  color: var(--gold-2);
+}
+
+.cta__info dd {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
   color: var(--text-on-dark-muted);
 }
 
-@media (min-width: 900px) {
-  .cta__seal {
-    display: block;
+.cta__info a {
+  color: var(--paper);
+  font-weight: 600;
+  transition: color var(--dur-fast);
+}
+
+.cta__info a:hover {
+  color: var(--gold-2);
+}
+
+@media (min-width: 960px) {
+  .cta__inner {
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: var(--space-10);
   }
 }
 </style>

@@ -34,10 +34,9 @@ useJsonLd([
 
 <template>
   <div>
-    <PageHero eyebrow="Procedimentos" :crumbs="[{ label: 'Início', to: '/' }, { label: 'Procedimentos' }]">
+    <PageHero :crumbs="[{ label: 'Início', to: '/' }, { label: 'Procedimentos' }]">
       <h1 v-reveal:lines class="display">
-        <span class="split-line"><span>Cirurgias que</span></span>
-        <span class="split-line" style="--line-delay: 90ms"><span><em>começam numa conversa.</em></span></span>
+        <span class="split-line"><span>Procedimentos</span></span>
       </h1>
       <p v-reveal="200" class="lead">
         Estes são os procedimentos mais procurados no consultório do Dr. Sergio Fernandes.
@@ -47,11 +46,7 @@ useJsonLd([
 
     <section class="section list">
       <div class="container">
-        <div class="list__grid">
-          <div v-for="(p, i) in procedures" :key="p.slug" v-reveal="i * 100">
-            <ProcedureCard :procedure="p" :index="i" />
-          </div>
-        </div>
+        <ProcedureList />
       </div>
     </section>
 
@@ -64,18 +59,4 @@ useJsonLd([
   padding-top: var(--space-9);
 }
 
-.list__grid {
-  display: grid;
-  gap: var(--spacing-grid);
-}
-
-.list__grid > div > * {
-  height: 100%;
-}
-
-@media (min-width: 720px) {
-  .list__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
 </style>

@@ -10,13 +10,12 @@ const tilt = computed(() => (progress.value - 0.5) * -10)
     <div class="container insta__grid">
       <div class="insta__copy">
         <div class="section-head">
-          <p v-reveal:fade class="eyebrow">No Instagram</p>
-          <h2 id="insta-title" v-reveal class="h2">
-            A rotina do consultório, <em>contada por quem viveu.</em>
+          <h2 id="insta-title" v-reveal class="h2 insta__handle">
+            {{ site.links.instagramHandle }} <VerifiedBadge :size="28" />
           </h2>
           <p v-reveal="100" class="lead">
-            São {{ site.stats.followers }} pessoas acompanhando bastidores do centro cirúrgico, diários de recuperação e depoimentos de pacientes.
-            Se você ainda está decidindo, é o melhor lugar pra ver a jornada inteira antes da consulta.
+            {{ site.stats.followers }} pessoas acompanham por lá os bastidores do centro cirúrgico, os diários de recuperação e os depoimentos das pacientes.
+            Se você ainda está decidindo, vale ver a jornada inteira antes da consulta.
           </p>
         </div>
 
@@ -39,7 +38,6 @@ const tilt = computed(() => (progress.value - 0.5) * -10)
       </div>
 
       <div ref="el" class="insta__stage">
-        <div class="insta__glow" aria-hidden="true" />
         <div class="insta__phone-wrap" :style="{ transform: `rotate(${tilt}deg)` }">
           <div v-reveal:scale="100">
             <div class="phone">
@@ -123,14 +121,12 @@ const tilt = computed(() => (progress.value - 0.5) * -10)
   padding-block: var(--space-6);
 }
 
-.insta__glow {
-  position: absolute;
-  width: 80%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: conic-gradient(from 200deg, rgba(254, 218, 117, 0.5), rgba(214, 41, 118, 0.35), rgba(79, 91, 213, 0.4), rgba(254, 218, 117, 0.5));
-  filter: blur(64px);
-  opacity: 0.55;
+.insta__handle {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  word-break: break-word;
 }
 
 .insta__phone-wrap {

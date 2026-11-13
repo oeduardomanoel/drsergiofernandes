@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { site } from '#shared/data/site'
+
 const steps = [
   {
     title: 'Avaliação',
@@ -25,15 +27,14 @@ const { el, progress } = useScrollProgress({ start: 0.7, end: 0.5 })
   <section id="jornada" class="section section--dark journey" aria-labelledby="jornada-title">
     <div class="container journey__grid">
       <div class="journey__head">
-        <div class="section-head">
-          <p v-reveal:fade class="eyebrow">Sua jornada</p>
-          <h2 id="jornada-title" v-reveal class="h2">
-            Da primeira conversa ao <em>espelho, meses depois.</em>
-          </h2>
-          <p v-reveal="100" class="lead">
-            Cirurgia plástica é um processo. Saber cada etapa antes de começar deixa tudo mais tranquilo.
-          </p>
-        </div>
+        <h2 id="jornada-title" v-reveal class="h2">Do primeiro contato à recuperação</h2>
+        <p v-reveal="100" class="lead">
+          São quatro etapas. Conhecer cada uma antes de começar deixa a decisão mais tranquila.
+        </p>
+        <figure v-if="site.images.hospitalReception" v-reveal:mask="200" class="journey__photo">
+          <img :src="site.images.hospitalReception" alt="Recepção do Hospital Beira Mar" width="708" height="945" loading="lazy">
+          <figcaption>Hospital Beira Mar</figcaption>
+        </figure>
       </div>
 
       <ol ref="el" class="journey__steps" role="list">
@@ -68,6 +69,47 @@ const { el, progress } = useScrollProgress({ start: 0.7, end: 0.5 })
 .journey__grid {
   display: grid;
   gap: var(--space-8);
+}
+
+.journey__head {
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+}
+
+.journey__photo {
+  position: relative;
+  margin-top: var(--space-3);
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  aspect-ratio: 16 / 10;
+  max-width: 520px;
+}
+
+.journey__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+  transition: transform 1200ms var(--ease-out);
+}
+
+.journey__photo:hover img {
+  transform: scale(1.05);
+}
+
+.journey__photo figcaption {
+  position: absolute;
+  left: var(--space-4);
+  bottom: var(--space-4);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: rgba(14, 30, 54, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--paper);
 }
 
 .journey__steps {

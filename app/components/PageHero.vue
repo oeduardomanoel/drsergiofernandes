@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  eyebrow: string
+  eyebrow?: string
   crumbs: { label: string, to?: string }[]
 }>()
 </script>
@@ -17,7 +17,7 @@ defineProps<{
           </li>
         </ol>
       </nav>
-      <p v-reveal:fade class="eyebrow">{{ eyebrow }}</p>
+      <p v-if="eyebrow" v-reveal:fade class="eyebrow">{{ eyebrow }}</p>
       <slot />
     </div>
   </section>

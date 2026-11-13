@@ -3,6 +3,7 @@ import { site, mapsUrl } from '#shared/data/site'
 import { procedures } from '#shared/data/procedures'
 
 const year = new Date().getFullYear()
+const main = site.locations.find(l => l.street)
 </script>
 
 <template>
@@ -12,7 +13,10 @@ const year = new Date().getFullYear()
         <div class="footer__intro">
           <BrandMark light />
           <p class="footer__claim">
-            Mais de 14 mil cirurgias e 30 anos de cirurgia plástica em Santa Catarina.
+            <template v-if="main">
+              {{ main.street }}, {{ main.district }}<br>
+              {{ main.city }} · {{ site.stateCode }} · {{ main.postalCode }}
+            </template>
           </p>
           <div class="footer__social">
             <a :href="site.links.instagram" target="_blank" rel="noopener" class="footer__icon" aria-label="Instagram">
@@ -74,6 +78,13 @@ const year = new Date().getFullYear()
   background: var(--ink);
   color: var(--text-on-dark);
   padding-block: var(--space-10) var(--space-6);
+}
+
+/* Espaço para a barra fixa de contato no mobile */
+@media (max-width: 767px) {
+  .footer {
+    padding-bottom: calc(var(--space-6) + var(--space-9) + env(safe-area-inset-bottom));
+  }
 }
 
 .footer__top {

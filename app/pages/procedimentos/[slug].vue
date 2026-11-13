@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { site } from '#shared/data/site'
+import { site, whatsappUrl } from '#shared/data/site'
 import { getProcedure, procedures } from '#shared/data/procedures'
 
 const route = useRoute()
@@ -11,6 +11,7 @@ if (!procedure) {
 
 const p = procedure
 const lowerName = p.slug === 'lipo-hd' ? 'Lipo HD' : p.name.toLowerCase()
+const waProcedure = whatsappUrl(`Olá! Vim pelo site e quero agendar uma avaliação de ${lowerName} com o Dr. Sergio Fernandes.`)
 const others = procedures.filter(o => o.slug !== p.slug)
 const path = `/procedimentos/${p.slug}`
 const { base, url } = usePageSeo({
@@ -59,15 +60,24 @@ useJsonLd([
           </h1>
           <p v-reveal="150" class="ph__tagline">{{ p.tagline }}</p>
           <div v-reveal="250" class="ph__actions">
-            <a :href="site.links.booking" target="_blank" rel="noopener" class="btn btn--lg">
-              Agendar avaliação
-              <AppIcon name="arrow-right" />
+            <a :href="waProcedure" target="_blank" rel="noopener" class="btn btn--lg">
+              <AppIcon name="whatsapp" />
+              Falar sobre {{ lowerName }}
             </a>
-            <span class="ph__by">com {{ site.fullName }} · {{ site.rqe }}</span>
+            <a :href="site.links.booking" target="_blank" rel="noopener" class="btn btn--ghost btn--lg">
+              Agendar avaliação
+            </a>
           </div>
         </div>
-        <div v-reveal:scale="200" class="ph__art" :class="`ph__art--${p.tone}`">
-          <ProcedureArt :slug="p.slug" />
+        <div v-reveal:scale="200" class="ph__doc">
+          <img :src="site.images.instagramAvatar" alt="Dr. Sergio Fernandes" width="96" height="96" class="ph__doc-img">
+          <div>
+            <p class="ph__doc-name">{{ site.fullName }}</p>
+            <p class="ph__doc-meta">{{ site.role }} · {{ site.crm }} · {{ site.rqe }}</p>
+            <a :href="site.google.url" target="_blank" rel="noopener" class="ph__doc-rating">
+              <span aria-hidden="true">★</span> {{ site.google.rating }} · {{ site.google.reviews }} avaliações no Google
+            </a>
+          </div>
         </div>
       </div>
     </PageHero>
@@ -86,8 +96,9 @@ useJsonLd([
           <div class="aside-card">
             <p class="aside-card__title">Quer saber se é indicado pra você?</p>
             <p class="aside-card__text">A avaliação é o único jeito de ter essa resposta com segurança.</p>
-            <a :href="site.links.booking" target="_blank" rel="noopener" class="btn btn--gold btn--block">
-              Agendar avaliação
+            <a :href="waProcedure" target="_blank" rel="noopener" class="btn btn--gold btn--block">
+              <AppIcon name="whatsapp" />
+              Chamar no WhatsApp
             </a>
           </div>
         </aside>
@@ -133,18 +144,13 @@ useJsonLd([
     <section class="section section--ivory others" aria-labelledby="others-title">
       <div class="container">
         <div class="section-head">
-          <p class="eyebrow">Outros procedimentos</p>
-          <h2 id="others-title" v-reveal class="h2">Veja também</h2>
+          <h2 id="others-title" v-reveal class="h2">Outros procedimentos</h2>
         </div>
-        <div class="others__grid">
-          <div v-for="(o, i) in others" :key="o.slug" v-reveal="i * 100">
-            <ProcedureCard :procedure="o" :index="procedures.indexOf(o)" />
-          </div>
-        </div>
+        <ProcedureList :items="others" />
       </div>
     </section>
 
-    <CtaFinal />
+    <CtaFinal :procedure="p.name" />
   </article>
 </template>
 
@@ -176,32 +182,58 @@ useJsonLd([
   margin-top: var(--space-2);
 }
 
-.ph__by {
-  font-size: var(--text-sm);
-  color: var(--text-muted);
+.ph__doc {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  justify-self: start;
+  padding: var(--spacing-card);
+  border-radius: var(--radius-xl);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
 }
 
-.ph__art {
-  justify-self: center;
-  width: min(320px, 80%);
-  aspect-ratio: 1;
-  padding: var(--space-8);
+.ph__doc:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.ph__doc-img {
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.ph__doc-name {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  line-height: 1.2;
+}
+
+.ph__doc-meta {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: var(--space-1);
+}
+
+.ph__doc-rating {
+  display: inline-block;
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition: color var(--dur-fast);
+}
+
+.ph__doc-rating span {
   color: var(--gold);
-  background: var(--sand);
-  transition: transform 900ms var(--ease-out);
 }
 
-.ph__art:hover {
-  transform: rotate(-6deg) scale(1.03);
-}
-
-.ph__art--rose { background: #f1dcd6; }
-.ph__art--gold { background: var(--gold-3); }
-
-.ph__art--navy {
-  background: var(--navy);
-  color: var(--gold-2);
+.ph__doc-rating:hover {
+  color: var(--navy-3);
 }
 
 .detail {
@@ -290,21 +322,6 @@ useJsonLd([
   font-size: var(--text-sm);
   color: var(--text-on-dark-muted);
   margin-bottom: var(--space-3);
-}
-
-.others__grid {
-  display: grid;
-  gap: var(--spacing-grid);
-}
-
-.others__grid > div > * {
-  height: 100%;
-}
-
-@media (min-width: 720px) {
-  .others__grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 @media (min-width: 960px) {

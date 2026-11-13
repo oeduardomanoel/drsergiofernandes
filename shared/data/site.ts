@@ -43,6 +43,13 @@ export const site = {
   description:
     'Cirurgião plástico com mais de 30 anos de experiência e mais de 14 mil cirurgias realizadas. Abdominoplastia, cirurgia de mama, Lipo HD e rinoplastia em Balneário Camboriú, Florianópolis e Criciúma (SC). CRM 7913/SC, RQE 11337.',
 
+  /** Avaliação pública no Google (perfil do consultório de Florianópolis). Conferir antes de publicar. */
+  google: {
+    rating: '4,9',
+    reviews: 78,
+    url: 'https://www.google.com/maps/search/?api=1&query=Dr.%20S%C3%A9rgio%20Fernandes%20Cirurgia%20Pl%C3%A1stica%20Florian%C3%B3polis',
+  },
+
   stats: {
     surgeries: 14000,
     years: 30,
@@ -57,7 +64,7 @@ export const site = {
     instagramHandle: '@drsergio.fernandes',
     threads: 'https://www.threads.net/@drsergio.fernandes',
     /** Número no formato 5548999999999. Vazio = botões de WhatsApp usam o link de agendamento. */
-    whatsappNumber: '',
+    whatsappNumber: '5548984317226',
     whatsappMessage: 'Olá! Vim pelo site e gostaria de agendar uma avaliação com o Dr. Sergio Fernandes.',
   },
 
@@ -71,9 +78,9 @@ export const site = {
     action: '/images/dr-sergio-centro-cirurgico.webp',
     /** Avatar usado na réplica do perfil do Instagram. */
     instagramAvatar: '/images/instagram/avatar.webp',
-    /** Ambientes (recortados do Instagram). */
-    reception: '/images/clinica-recepcao.webp',
-    hospital: '/images/hbm-hospital.webp',
+    /** Hospital Beira Mar (recortes do Instagram). */
+    hospitalReception: '/images/hospital-beira-mar-recepcao.webp',
+    hospital: '/images/hospital-beira-mar-entrada.webp',
   },
 
   locations: [

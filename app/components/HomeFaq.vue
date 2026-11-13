@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { site } from '#shared/data/site'
+import { whatsappUrl } from '#shared/data/site'
 import { homeFaqs } from '#shared/data/procedures'
 </script>
 
@@ -8,17 +8,14 @@ import { homeFaqs } from '#shared/data/procedures'
     <div class="container faq-section__grid">
       <div class="faq-section__head">
         <div class="section-head">
-          <p v-reveal:fade class="eyebrow">Dúvidas frequentes</p>
-          <h2 id="faq-title" v-reveal class="h2">
-            Perguntas que <em>quase toda paciente</em> faz.
-          </h2>
+          <h2 id="faq-title" v-reveal class="h2">Dúvidas frequentes</h2>
           <p v-reveal="100" class="lead">
-            Não encontrou a sua? A equipe responde pelo link de agendamento.
+            Não achou a sua? A equipe responde pelo WhatsApp.
           </p>
         </div>
-        <a v-reveal="200" :href="site.links.booking" target="_blank" rel="noopener" class="btn btn--ghost">
-          Falar com a equipe
-          <AppIcon name="arrow-right" />
+        <a v-reveal="200" :href="whatsappUrl('Olá! Tenho uma dúvida sobre cirurgia plástica com o Dr. Sergio Fernandes.')" target="_blank" rel="noopener" class="btn btn--ghost">
+          <AppIcon name="whatsapp" />
+          Perguntar no WhatsApp
         </a>
       </div>
       <FaqList :items="homeFaqs" />

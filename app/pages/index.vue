@@ -29,8 +29,6 @@ useJsonLd([
 <template>
   <div>
     <HomeHero />
-    <HomeStats />
-    <ProcedureMarquee />
     <HomeAbout />
     <HomeProcedures />
     <HomeJourney />

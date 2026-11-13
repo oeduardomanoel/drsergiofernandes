@@ -77,7 +77,7 @@ const main = [
             class="lk__proc"
             :class="`lk__proc--${p.tone}`"
           >
-            <span class="lk__proc-art"><ProcedureArt :slug="p.slug" /></span>
+            <span class="lk__proc-num">0{{ i + 1 }}</span>
             <span class="lk__proc-name">{{ p.name }}</span>
           </NuxtLink>
         </div>
@@ -300,8 +300,9 @@ const main = [
 
 .lk__proc {
   display: grid;
-  justify-items: center;
-  gap: var(--space-2);
+  align-content: space-between;
+  gap: var(--space-6);
+  min-height: 120px;
   padding: var(--space-4);
   border-radius: var(--radius-lg);
   background: var(--sand);
@@ -322,14 +323,12 @@ const main = [
   color: var(--paper);
 }
 
-.lk__proc-art {
-  width: 72px;
-  height: 72px;
-  color: var(--gold);
-}
-
-.lk__proc--navy .lk__proc-art {
-  color: var(--gold-2);
+.lk__proc-num {
+  justify-self: start;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  opacity: 0.6;
 }
 
 .lk__proc-name {
