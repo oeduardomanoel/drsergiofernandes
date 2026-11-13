@@ -6,7 +6,7 @@ withDefaults(defineProps<{
   eager?: boolean
   width?: number
   height?: number
-}>(), { src: '', shape: 'arch', eager: false, width: 800, height: 1000 })
+}>(), { src: '', shape: 'arch', eager: false, width: 1200, height: 1517 })
 </script>
 
 <template>

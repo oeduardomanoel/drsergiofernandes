@@ -31,7 +31,7 @@ const main = [
       <header class="lk__head">
         <div v-reveal:scale class="lk__avatar">
           <span class="lk__avatar-inner">
-            <img v-if="site.images.portrait" :src="site.images.portrait" alt="Dr. Sergio Fernandes" width="112" height="112">
+            <img v-if="site.images.instagramAvatar" :src="site.images.instagramAvatar" alt="Dr. Sergio Fernandes" width="112" height="112">
             <BrandMark v-else compact light />
           </span>
         </div>
